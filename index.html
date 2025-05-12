@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="https://tlea.pfhw.org.nz/wp-content/uploads/2022/04/PFHW-Design-3-300x300.png" alt="Logo" class="logo">
+            </div>
+            <h1>AI Image Analysis</h1>
+            <p class="subtitle">Upload an image to analyze with our AI model</p>
+        </header>
+
+        <main>
+            <div class="upload-card">
+                <div class="upload-area" id="dropZone">
+                    <input type="file" id="imageInput" accept="image/*" class="file-input">
+                    <div class="upload-content">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                        <p>Drag & drop an image or click to browse</p>
+                        <span class="file-info">Supported formats: JPG, PNG</span>
+                    </div>
+                </div>
+                <button id="analyzeButton" class="analyze-button" disabled>
+                    Analyze Image
+                </button>
+            </div>
+
+            <div class="results-container">
+                <div class="preview-section">
+                    <img id="uploadedImage" style="display: none;">
+                </div>
+                <div class="results-section">
+                    <div id="loadingIndicator" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing image...</p>
+                    </div>
+                    <div id="results"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
