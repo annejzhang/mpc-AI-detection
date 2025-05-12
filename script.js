@@ -1,3 +1,7 @@
+// Constants
+const API_URL = 'https://mpc-ai-detection.onrender.com';
+
+// Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('dropZone');
     const imageInput = document.getElementById('imageInput');
@@ -68,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             console.log('Sending request to server...');
-            const response = await fetch('https://mpc-ai-detection.onrender.com/analyze', {
+            const response = await fetch(`${API_URL}/analyze`, {
                 method: 'POST',
                 body: formData
             });
@@ -92,4 +96,4 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingIndicator.style.display = 'none';
         }
     });
-});
+}); 
