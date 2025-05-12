@@ -1,7 +1,3 @@
-const API_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://your-deployed-backend-url.com'  // Replace with your deployed backend URL
-    : 'http://localhost:3000';
-
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('dropZone');
     const imageInput = document.getElementById('imageInput');
@@ -96,4 +92,4 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingIndicator.style.display = 'none';
         }
     });
-}); 
+});
