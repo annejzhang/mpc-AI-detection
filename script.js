@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('image', file);
 
         try {
-            const response = await fetch('/analyze', {
+            const response = await fetch('https://mpc-ai-detection.onrender.com/analyze', {
                 method: 'POST',
                 body: formData
             });
