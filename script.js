@@ -1,7 +1,7 @@
-const API_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://your-deployed-backend-url.com'  // Replace with your deployed backend URL
-    : 'http://localhost:3000';
+// Constants
+const API_URL = 'http://localhost:3000';
 
+// Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('dropZone');
     const imageInput = document.getElementById('imageInput');
@@ -9,20 +9,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingIndicator = document.getElementById('loadingIndicator');
     const results = document.getElementById('results');
 
+    // Add console logs for debugging
+    console.log('Script loaded');
+
     // Handle drag and drop
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropZone.style.borderColor = '#2563eb';
+        console.log('File dragged over');
     });
 
     dropZone.addEventListener('dragleave', (e) => {
         e.preventDefault();
         dropZone.style.borderColor = '#e2e8f0';
+        console.log('File dragged out');
     });
 
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
         dropZone.style.borderColor = '#e2e8f0';
+        console.log('File dropped');
         
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             imageInput.files = e.dataTransfer.files;
@@ -35,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleFileSelect() {
         const file = imageInput.files[0];
+        console.log('File selected:', file);
+        
         if (file && file.type.startsWith('image/')) {
             analyzeButton.disabled = false;
             // Preview the image
@@ -63,18 +71,25 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('image', file);
 
         try {
-            const response = await fetch('/analyze', {
+            console.log('Sending request to server...');
+            const response = await fetch(`${API_URL}/analyze`, {
                 method: 'POST',
                 body: formData
             });
 
+            console.log('Response status:', response.status);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorText = await response.text();
+                console.error('Server error:', errorText);
+                throw new Error(`Server error: ${response.status}\n${errorText}`);
             }
 
             const data = await response.json();
+            console.log('Response data:', data);
             results.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
         } catch (error) {
+            console.error('Error:', error);
             results.innerHTML = `<div style="color: #ef4444;">Error: ${error.message}</div>`;
         } finally {
             analyzeButton.disabled = false;
