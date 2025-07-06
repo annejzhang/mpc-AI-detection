@@ -87,7 +87,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
             console.log('Response data:', data);
-            results.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            // Format results in English
+            let html = `<div><strong>Request ID:</strong> ${data.inference_id}<br>`;
+            html += `<strong>Processing time:</strong> ${data.time.toFixed(3)} seconds<br>`;
+            html += `<strong>Image size:</strong> ${data.image.width} x ${data.image.height} pixels<br>`;
+            if (data.predictions && data.predictions.length > 0) {
+                html += `<strong>Detections:</strong><ol>`;
+                data.predictions.forEach((pred, idx) => {
+                    html += `<li>`;
+                    html += `<strong>Type:</strong> ${pred.class}<br>`;
+                    html += `<strong>Location (center):</strong> x = ${pred.x}, y = ${pred.y}<br>`;
+                    html += `<strong>Size:</strong> ${pred.width} x ${pred.height} pixels<br>`;
+                    html += `<strong>Confidence:</strong> ${(pred.confidence * 100).toFixed(1)}%<br>`;
+                    html += `<strong>Class ID:</strong> ${pred.class_id}<br>`;
+                    html += `<strong>Detection ID:</strong> ${pred.detection_id}`;
+                    html += `</li>`;
+                });
+                html += `</ol>`;
+            } else {
+                html += `<strong>Detections:</strong> None found.`;
+            }
+            html += `</div>`;
+            results.innerHTML = html;
         } catch (error) {
             console.error('Error:', error);
             results.innerHTML = `<div style="color: #ef4444;">Error: ${error.message}</div>`;
