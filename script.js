@@ -110,38 +110,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `<strong>Detections:</strong> None found.`;
             }
             html += `</div>`;
-            results.innerHTML = html;
+
+            // Add a key/legend for the red box
+            let legend = `<div style="margin-top:10px;"><span style="display:inline-block;width:20px;height:20px;border:2px solid #ff0000;vertical-align:middle;"></span> = Moth plant</div>`;
+            results.innerHTML = html + legend;
 
             // Draw bounding boxes on canvas
             const uploadedImage = document.getElementById('uploadedImage');
             const canvas = document.getElementById('resultsCanvas');
-            // Wait for image to load and get its display size
             if (uploadedImage && canvas) {
-                // Set canvas size to match image display size
-                canvas.width = uploadedImage.width;
-                canvas.height = uploadedImage.height;
-                canvas.style.width = uploadedImage.width + 'px';
-                canvas.style.height = uploadedImage.height + 'px';
+                // Get natural and displayed sizes
+                const naturalWidth = uploadedImage.naturalWidth;
+                const naturalHeight = uploadedImage.naturalHeight;
+                const displayWidth = uploadedImage.width;
+                const displayHeight = uploadedImage.height;
+                // Set canvas size to match displayed image size
+                canvas.width = displayWidth;
+                canvas.height = displayHeight;
+                canvas.style.width = displayWidth + 'px';
+                canvas.style.height = displayHeight + 'px';
                 canvas.style.display = 'block';
-                // Position canvas over image
-                const rect = uploadedImage.getBoundingClientRect();
-                canvas.style.left = rect.left + 'px';
-                canvas.style.top = rect.top + 'px';
+                // Position canvas over image (relative positioning in container)
+                canvas.style.left = uploadedImage.offsetLeft + 'px';
+                canvas.style.top = uploadedImage.offsetTop + 'px';
+                // Calculate scale factors
+                const scaleX = displayWidth / naturalWidth;
+                const scaleY = displayHeight / naturalHeight;
                 // Draw boxes
                 const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 if (data.predictions && data.predictions.length > 0) {
                     data.predictions.forEach(pred => {
-                        // Roboflow gives center x/y, width, height in image pixels
-                        const x = pred.x - pred.width / 2;
-                        const y = pred.y - pred.height / 2;
+                        // Scale coordinates from natural to displayed size
+                        const x = (pred.x - pred.width / 2) * scaleX;
+                        const y = (pred.y - pred.height / 2) * scaleY;
+                        const w = pred.width * scaleX;
+                        const h = pred.height * scaleY;
                         ctx.strokeStyle = '#ff0000';
                         ctx.lineWidth = 2;
-                        ctx.strokeRect(x, y, pred.width, pred.height);
-                        // Optionally, label
-                        ctx.font = '16px Arial';
-                        ctx.fillStyle = '#ff0000';
-                        ctx.fillText(pred.class, x + 4, y + 18);
+                        ctx.strokeRect(x, y, w, h);
+                        // No label inside the box
                     });
                 }
             }
