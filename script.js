@@ -111,6 +111,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             html += `</div>`;
             results.innerHTML = html;
+
+            // Draw bounding boxes on canvas
+            const uploadedImage = document.getElementById('uploadedImage');
+            const canvas = document.getElementById('resultsCanvas');
+            // Wait for image to load and get its display size
+            if (uploadedImage && canvas) {
+                // Set canvas size to match image display size
+                canvas.width = uploadedImage.width;
+                canvas.height = uploadedImage.height;
+                canvas.style.width = uploadedImage.width + 'px';
+                canvas.style.height = uploadedImage.height + 'px';
+                canvas.style.display = 'block';
+                // Position canvas over image
+                const rect = uploadedImage.getBoundingClientRect();
+                canvas.style.left = rect.left + 'px';
+                canvas.style.top = rect.top + 'px';
+                // Draw boxes
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (data.predictions && data.predictions.length > 0) {
+                    data.predictions.forEach(pred => {
+                        // Roboflow gives center x/y, width, height in image pixels
+                        const x = pred.x - pred.width / 2;
+                        const y = pred.y - pred.height / 2;
+                        ctx.strokeStyle = '#ff0000';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(x, y, pred.width, pred.height);
+                        // Optionally, label
+                        ctx.font = '16px Arial';
+                        ctx.fillStyle = '#ff0000';
+                        ctx.fillText(pred.class, x + 4, y + 18);
+                    });
+                }
+            }
         } catch (error) {
             console.error('Error:', error);
             results.innerHTML = `<div style="color: #ef4444;">Error: ${error.message}</div>`;

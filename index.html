@@ -36,7 +36,8 @@
 
             <div class="results-container">
                 <div class="preview-section">
-                    <img id="uploadedImage" style="display: none;">
+                    <img id="uploadedImage" style="display:none; max-width:100%; max-height:400px; position:relative; z-index:1;" />
+                    <canvas id="resultsCanvas" style="display:none; position:absolute; left:0; top:0; z-index:2;"></canvas>
                 </div>
                 <div class="results-section">
                     <div id="loadingIndicator" class="loading" style="display: none;">
