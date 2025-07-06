@@ -1,5 +1,5 @@
 // Constants
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://mpc-ai-detection.onrender.com/';
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
