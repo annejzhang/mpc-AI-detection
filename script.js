@@ -91,7 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let html = `<div><strong>Request ID:</strong> ${data.inference_id}<br>`;
             html += `<strong>Processing time:</strong> ${data.time.toFixed(3)} seconds<br>`;
             html += `<strong>Image size:</strong> ${data.image.width} x ${data.image.height} pixels<br>`;
-            if (data.predictions && data.predictions.length > 0) {
+            const count = data.predictions ? data.predictions.length : 0;
+            html += `<strong>Moth plants detected:</strong> ${count}<br>`;
+            if (count > 0) {
                 html += `<strong>Detections:</strong><ol>`;
                 data.predictions.forEach((pred, idx) => {
                     html += `<li>`;
